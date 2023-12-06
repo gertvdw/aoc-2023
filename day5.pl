@@ -73,29 +73,59 @@ be_farmer(@seeds);
 my @sorted = sort { $locations{$a} <=> $locations{$b} } keys %locations;
 printf("Part 1: %d\n", $locations{$sorted[0]});
 
-sub seed_for_location {
-  my $loc = shift;
-  $locations{$loc} = $loc unless defined $locations{$loc};
-  map { 
-    $locations{$loc} = find_reverse_mapping($_, $locations{$loc});
-  } reverse @maps;
 
-  if (!is_known_seed($locations{$loc})) {
-    delete($locations{$loc});
-  }
-
-  if (defined $locations{$loc}) {
-    printf("First known seed: %d\n", $locations{$loc});
-    return 1;
-  }
-
-   return 0;
-}
 
 # On with part 2. 
 # The seeds are not just seeds, but seed ranges.
 # brute-force: 7m34s
 # 51752125 was my first answer.
+
+# sub find_reverse_mapping {
+#   my ($map_key, $dest_no) = @_;
+#   foreach my $source (keys %{$map{$map_key}}) {
+#     my $range = $map{$map_key}{$source}{range};
+#     my $src_max = $source + $range -1;
+#     my $dest = $map{$map_key}{$source}{dest};
+#     my $dest_max = $dest + $range -1;
+#     my $offset = $dest_no - $dest;
+
+#     if ($dest_no >= $dest && $dest_no <= $dest_max) {
+#       return $source + $offset;
+#     }
+#   }
+#   return $dest_no + 0;
+# }
+
+# sub is_known_seed {
+#   my $seed_no = shift;
+#   for (my $index = 0; $index < $#seeds; $index += 2) {
+#     my $start = $seeds[$index];
+#     my $end = $start + $seeds[$index + 1] - 1;
+#     if ($seed_no >= $start && $seed_no <= $end) {
+#       return 1;
+#     }
+#   }
+#   return 0;
+# }
+
+# sub seed_for_location {
+#   my $loc = shift;
+#   $locations{$loc} = $loc unless defined $locations{$loc};
+#   map { 
+#     $locations{$loc} = find_reverse_mapping($_, $locations{$loc});
+#   } reverse @maps;
+
+#   if (!is_known_seed($locations{$loc})) {
+#     delete($locations{$loc});
+#   }
+
+#   if (defined $locations{$loc}) {
+#     printf("First known seed: %d\n", $locations{$loc});
+#     return 1;
+#   }
+
+#    return 0;
+# }
 # %locations = ();
 # for (my $i = 0; $i < 51752125; $i++) {
 #   if (seed_for_location($i)) {
